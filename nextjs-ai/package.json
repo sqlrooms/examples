@@ -1,6 +1,6 @@
 {
   "name": "nextjs-ai",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -16,8 +16,8 @@
     "@sqlrooms/duckdb": "latest",
     "@sqlrooms/project-builder": "latest",
     "@sqlrooms/project-config": "latest",
-    "@sqlrooms/ui": "latest",
     "@sqlrooms/sql-editor": "latest",
+    "@sqlrooms/ui": "latest",
     "ai": "^4.1.0",
     "immer": "^10.1.1",
     "lucide-react": "0.456.0",

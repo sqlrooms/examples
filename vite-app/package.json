@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@sqlrooms/data-table": "latest",
+    "@sqlrooms/dropzone": "latest",
     "@sqlrooms/duckdb": "latest",
     "@sqlrooms/project-builder": "latest",
     "@sqlrooms/project-config": "latest",
-    "@sqlrooms/dropzone": "latest",
     "@sqlrooms/sql-editor": "latest",
     "@sqlrooms/ui": "latest",
     "@sqlrooms/utils": "latest",
