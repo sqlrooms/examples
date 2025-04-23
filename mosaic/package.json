@@ -1,0 +1,50 @@
+{
+  "name": "sqlrooms-mosaic",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@sqlrooms/data-table": "0.12.0",
+    "@sqlrooms/dropzone": "0.12.0",
+    "@sqlrooms/duckdb": "0.12.0",
+    "@sqlrooms/project-builder": "0.12.0",
+    "@sqlrooms/project-config": "0.12.0",
+    "@sqlrooms/sql-editor": "0.12.0",
+    "@sqlrooms/ui": "0.12.0",
+    "@sqlrooms/utils": "0.12.0",
+    "@sqlrooms/mosaic": "0.12.0",
+    "immer": "^10.1.1",
+    "lucide-react": "^0.474.0",
+    "react-dropzone": "^14.3.5",
+    "react-icons": "^5.4.0",
+    "react-mosaic-component": "5.3.0",
+    "zod": "^3.24.1",
+    "zustand": "^5.0.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.2.0"
+  }
+}
