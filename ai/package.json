@@ -1,0 +1,57 @@
+{
+  "name": "sqlrooms-ai",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^1.2.12",
+    "@ai-sdk/deepseek": "^0.2.14",
+    "@ai-sdk/google": "^1.2.19",
+    "@ai-sdk/openai": "^1.3.22",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@sqlrooms/ai": "0.24.16",
+    "@sqlrooms/dropzone": "0.24.16",
+    "@sqlrooms/duckdb": "0.24.16",
+    "@sqlrooms/room-shell": "0.24.16",
+    "@sqlrooms/room-config": "0.24.16",
+    "@sqlrooms/sql-editor": "0.24.16",
+    "@sqlrooms/ui": "0.24.16",
+    "@sqlrooms/utils": "0.24.16",
+    "@sqlrooms/vega": "0.24.16",
+    "ai": "^4.3.19",
+    "immer": "^10.1.1",
+    "lucide-react": "^0.474.0",
+    "ollama-ai-provider-v2": "0.0.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "superjson": "^2.2.2",
+    "zod": "^3.25.73",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "@types/react": "^19.1.7",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.5.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.28.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^15.15.0",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^3.4.17",
+    "typescript": "5.8.3",
+    "typescript-eslint": "^8.34.0",
+    "vite": "^6.3.5"
+  },
+  "overrides": {
+    "@duckdb/duckdb-wasm": "1.29.1-dev269.0"
+  }
+}
