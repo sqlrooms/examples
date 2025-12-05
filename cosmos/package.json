@@ -1,0 +1,52 @@
+{
+  "name": "sqlrooms-cosmos",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@cosmograph/cosmos": "2.0.0-beta.22",
+    "@sqlrooms/cosmos": "0.26.1-rc.7",
+    "@sqlrooms/duckdb": "0.26.1-rc.7",
+    "@sqlrooms/room-config": "0.26.1-rc.7",
+    "@sqlrooms/room-shell": "0.26.1-rc.7",
+    "@sqlrooms/sql-editor": "0.26.1-rc.7",
+    "@sqlrooms/ui": "0.26.1-rc.7",
+    "@sqlrooms/utils": "0.26.1-rc.7",
+    "d3-scale": "^4.0.2",
+    "d3-scale-chromatic": "^3.1.0",
+    "immer": "^11.0.1",
+    "lucide-react": "^0.555.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.8",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-scale-chromatic": "^3.1.0",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.21",
+    "globals": "^15.15.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.44.1",
+    "vite": "^7.1.9"
+  },
+  "overrides": {
+    "@duckdb/duckdb-wasm": "1.31.0"
+  }
+}
