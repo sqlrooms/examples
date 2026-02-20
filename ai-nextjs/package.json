@@ -1,0 +1,35 @@
+{
+  "name": "sqlrooms-ai-nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^1.0.18",
+    "@openassistant/utils": "1.0.0-alpha.0",
+    "@sqlrooms/ai-core": "0.27.0",
+    "@sqlrooms/ai-settings": "0.27.0",
+    "@sqlrooms/room-store": "0.27.0",
+    "@sqlrooms/ui": "0.27.0",
+    "ai": "^5.0.44",
+    "lucide-react": "^0.555.0",
+    "next": "15.5.10",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^20.19.17",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
+    "tw-animate-css": "^1.3.8",
+    "typescript": "5.9.2"
+  }
+}
