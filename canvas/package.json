@@ -1,0 +1,36 @@
+{
+  "name": "canvas-example",
+  "private": true,
+  "version": "0.24.14",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@sqlrooms/artifacts": "0.29.0-rc.3",
+    "@sqlrooms/canvas": "0.29.0-rc.3",
+    "@sqlrooms/cells": "0.29.0-rc.3",
+    "@sqlrooms/dropzone": "0.29.0-rc.3",
+    "@sqlrooms/layout": "0.29.0-rc.3",
+    "@sqlrooms/room-shell": "0.29.0-rc.3",
+    "@sqlrooms/sql-editor": "0.29.0-rc.3",
+    "@sqlrooms/ui": "0.29.0-rc.3",
+    "@sqlrooms/utils": "0.29.0-rc.3",
+    "@xyflow/react": "^12.8.5",
+    "lucide-react": "^0.555.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
+    "tailwindcss": "^4.1.18",
+    "typescript": "5.9.2",
+    "vite": "^8.0.5"
+  }
+}
