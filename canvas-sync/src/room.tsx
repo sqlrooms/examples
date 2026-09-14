@@ -1,0 +1,67 @@
+import {RoomShell} from '@sqlrooms/room-shell';
+import {
+  ThemeSwitch,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@sqlrooms/ui';
+import {Zap, ZapOff} from 'lucide-react';
+import {InputApiKey} from './components/InputApiKey';
+import {roomStore, useRoomStore} from './store';
+import type {FC} from 'react';
+
+type ConnectionStatusVisual = {
+  label: string;
+  colorClass: string;
+};
+
+const CONNECTION_STATUS: Record<string, ConnectionStatusVisual> = {
+  open: {label: 'Connected', colorClass: 'text-emerald-500'},
+  connecting: {label: 'Connecting', colorClass: 'text-amber-500'},
+  closed: {label: 'Disconnected', colorClass: 'text-rose-500'},
+  error: {label: 'Error', colorClass: 'text-rose-600'},
+  idle: {label: 'Idle', colorClass: 'text-muted-foreground'},
+};
+
+function ConnectionStatusIndicator() {
+  const status = useRoomStore((s) => s.crdt.connectionStatus);
+  const visual = CONNECTION_STATUS[status] ?? CONNECTION_STATUS.idle;
+  const Icon = status === 'open' ? Zap : ZapOff;
+
+  return (
+    <TooltipProvider delayDuration={150}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="text-muted-foreground flex items-center gap-2 text-xs">
+            <Icon
+              className={`h-3 w-3 ${visual.colorClass}`}
+              fill="currentColor"
+            />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <div className="text-xs">CRDT WebSocket: {status}</div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+export const Room: FC = () => {
+  return (
+    <RoomShell className="h-screen w-screen" roomStore={roomStore}>
+      <RoomShell.SidebarContainer>
+        <ConnectionStatusIndicator />
+        <RoomShell.TabButtons />
+        <div className="flex-1" />
+        <RoomShell.CommandPalette.Button />
+        <ThemeSwitch />
+      </RoomShell.SidebarContainer>
+      <RoomShell.LayoutComposer />
+      <RoomShell.LoadingProgress />
+      <RoomShell.CommandPalette />
+      <InputApiKey className="absolute top-5 right-15 z-10" />
+    </RoomShell>
+  );
+};

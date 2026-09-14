@@ -1,0 +1,233 @@
+import type {Param} from '@sqlrooms/mosaic';
+import {
+  type ChartConfig,
+  createDefaultChartTypes,
+  isSpecChartType,
+  MosaicChartBuilder,
+  MosaicSpecChart,
+  type Spec,
+} from '@sqlrooms/mosaic';
+import {RoomPanel} from '@sqlrooms/room-shell';
+import {Button, ScrollArea, SpinnerPane} from '@sqlrooms/ui';
+import {Code, FilterX, X} from 'lucide-react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import {useRoomStore} from '../../store';
+import {defaultChartConfigs, type FilterChartItem} from './filterPlots';
+
+export const FiltersPanel: FC<{className?: string}> = ({className}) => {
+  const mosaicConn = useRoomStore((state) => state.mosaic.connection);
+  const isTableReady = useRoomStore((state) =>
+    state.db.tables.find((t) => t.tableName === 'earthquakes'),
+  );
+  if (mosaicConn.status === 'loading') {
+    return <SpinnerPane className="h-full w-full" />;
+  }
+  if (!isTableReady || mosaicConn.status !== 'ready') {
+    return null;
+  }
+  return <FiltersPanelContent className={className} />;
+};
+
+const FiltersPanelContent = ({className}: {className?: string}) => {
+  const brush = useRoomStore((state) => state.mosaic.getSelection('brush'));
+
+  // Shared params map for cross-filtering across all charts
+  const paramsMap = useMemo(
+    () => new Map([['brush', brush as Param<unknown>]]),
+    [brush],
+  );
+
+  // Chart list state
+  const [charts, setCharts] = useState<FilterChartItem[]>(() => [
+    ...defaultChartConfigs,
+  ]);
+
+  // Track which charts have editor open
+  const [editingCharts, setEditingCharts] = useState<Set<string>>(
+    () => new Set(),
+  );
+
+  // Chart builder dialog state
+  const [builderOpen, setBuilderOpen] = useState(false);
+  const earthquakesTable = useRoomStore((state) =>
+    state.db.findTable('earthquakes'),
+  );
+
+  const handleSpecChange = useCallback((chartId: string, newSpec: Spec) => {
+    setCharts((prev) =>
+      prev.map((c) => (c.id === chartId ? {...c, spec: newSpec} : c)),
+    );
+  }, []);
+
+  const toggleEditor = useCallback((chartId: string) => {
+    setEditingCharts((prev) => {
+      const next = new Set(prev);
+      if (next.has(chartId)) {
+        next.delete(chartId);
+      } else {
+        next.add(chartId);
+      }
+      return next;
+    });
+  }, []);
+
+  // Only include spec-based chart types (filter panel doesn't support component renderers)
+  const chartTypes = useMemo(
+    () => createDefaultChartTypes().filter(isSpecChartType),
+    [],
+  );
+
+  const handleCreateChart = useCallback(
+    (title: string, config: ChartConfig) => {
+      try {
+        const id = `chart-${Date.now()}`;
+        const chartTypeDef = chartTypes.find(
+          (ct) => ct.id === config.chartType,
+        );
+        if (!chartTypeDef) {
+          console.error(`Unknown chart type: ${config.chartType}`);
+          return;
+        }
+        if (!earthquakesTable) {
+          console.error('No data table');
+          return;
+        }
+        // chartTypes is filtered to only spec-based types, so createSpec exists
+        const spec = chartTypeDef.createSpec({
+          dataTable: earthquakesTable,
+          settings: config.settings,
+        });
+        setCharts((prev) => [{id, title, spec}, ...prev]);
+      } catch (error) {
+        console.error('Failed to create chart:', error);
+      }
+    },
+    [chartTypes],
+  );
+
+  const handleRemoveChart = useCallback((chartId: string) => {
+    setCharts((prev) => prev.filter((c) => c.id !== chartId));
+    setEditingCharts((prev) => {
+      const next = new Set(prev);
+      next.delete(chartId);
+      return next;
+    });
+  }, []);
+
+  const handleClearAllFilters = useCallback(() => {
+    brush?.reset();
+  }, [brush]);
+
+  const [selectionVersion, setSelectionVersion] = useState(0);
+  useEffect(() => {
+    if (!brush) return;
+    const handler = () => setSelectionVersion((v) => v + 1);
+    brush.addEventListener('value', handler);
+    return () => brush.removeEventListener('value', handler);
+  }, [brush]);
+
+  const hasActiveFilters = useMemo(
+    () => Boolean(brush?.clauses.length),
+    [brush, selectionVersion],
+  );
+
+  return (
+    <RoomPanel showHeader={false} className={className}>
+      <div className="flex h-full flex-col">
+        {earthquakesTable && (
+          <MosaicChartBuilder
+            tableName="earthquakes"
+            columns={earthquakesTable.columns}
+            chartTypes={chartTypes}
+            onCreateChart={handleCreateChart}
+            open={builderOpen}
+            onOpenChange={setBuilderOpen}
+          >
+            <div className="flex items-center gap-2 p-2">
+              <MosaicChartBuilder.Trigger className="flex-1" />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClearAllFilters}
+                disabled={!hasActiveFilters}
+                title="Clear all filters"
+              >
+                <FilterX className="h-3.5 w-3.5" />
+                <span>Clear</span>
+              </Button>
+            </div>
+            <ScrollArea className="flex-1">
+              <div className="p-2">
+                <div className="w-full space-y-2">
+                  {charts.map((chart) => {
+                    const isEditing = editingCharts.has(chart.id);
+                    return (
+                      <div key={chart.id} className="rounded-sm border px-2">
+                        <div className="py-2 hover:no-underline">
+                          <div className="flex w-full items-center justify-between pr-2">
+                            <span className="text-sm font-medium">
+                              {chart.title}
+                            </span>
+                            <div
+                              className="flex items-center gap-1"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={() => toggleEditor(chart.id)}
+                                title={isEditing ? 'Hide editor' : 'Edit spec'}
+                              >
+                                <Code className="h-3.5 w-3.5" />
+                              </Button>
+                              {!defaultChartConfigs.some(
+                                (d) => d.id === chart.id,
+                              ) && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6"
+                                  onClick={() => handleRemoveChart(chart.id)}
+                                  title="Remove chart"
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="overflow-hidden pb-4">
+                          <MosaicSpecChart.Container
+                            spec={chart.spec}
+                            params={paramsMap}
+                            editable={isEditing}
+                            onSpecChange={(spec) =>
+                              handleSpecChange(chart.id, spec)
+                            }
+                          >
+                            <MosaicSpecChart.Display className="h-64" />
+                            {isEditing && (
+                              <>
+                                <MosaicSpecChart.SpecEditor
+                                  className="h-64 border-t"
+                                  title=""
+                                />
+                                <MosaicSpecChart.Actions />
+                              </>
+                            )}
+                          </MosaicSpecChart.Container>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </ScrollArea>
+            <MosaicChartBuilder.Dialog />
+          </MosaicChartBuilder>
+        )}
+      </div>
+    </RoomPanel>
+  );
+};
